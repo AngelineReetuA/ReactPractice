@@ -115,131 +115,135 @@ function Hooks() {
 
   function plusOne() {
     plus.current++;
-    // setDisplay(plus.current);
+    setDisplay(display+1);
     console.log("State: ", display);
-    console.log("Ref: ", plus);
+    console.log("useRef: ", plus);
   }
 
   return (
     <>
-      <div id="usestate">
-        <h4>useState</h4>
-        <button
-          onClick={() => {
-            setCount(count + 1);
-          }}
-        >
-          Count: {count}
-        </button>
-        <br />
-        <br />
-        <div>
-          List of ways to say hello:
-          <ul>
-            {namelist.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
+      <div style={{ padding: "30px" }}>
+        <h3>Six State Management Hooks of React</h3>
+        <small>Check code comments and console for verification logs</small>
+        <div id="usestate">
+          <h4>useState</h4>
+          <button
+            onClick={() => {
+              setCount(count + 1);
+            }}
+          >
+            Count: {count}
+          </button>
           <br />
-          Know one?{" "}
+          <br />
+          <div>
+            List of ways to say hello:
+            <ul>
+              {namelist.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+            <br />
+            Know one?{" "}
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+            />
+            <button onClick={addName}>Add</button>
+          </div>
+        </div>
+        <hr />
+        <div id="usereducer">
+          <h4>useReducer</h4>
+          <div>Number: {state.number}</div>
+          <button onClick={() => dispatch({ type: "INCREMENT" })}>
+            PLUS ONE
+          </button>
+          <button onClick={() => dispatch({ type: "DECREMENT" })}>
+            MINUS ONE
+          </button>
+          <button onClick={() => dispatch({ type: "ZERO" })}>RESTART</button>
+        </div>
+        <hr />
+        <div id="usememo">
+          <h4>useMemo</h4>
+          <h5>A calculation without UseMemo</h5>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              setCount1Bad(e.target.number.value);
+              totalCountBad();
+            }}
+          >
+            <input type="number" name="number" />
+            <button type="submit">Submit</button>
+            <div>Calculation: {badtotalcount}</div>
+          </form>
+          <br />
+          <h5>A calculation with UseMemo</h5>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              setCount1(e.target.number.value);
+            }}
+          >
+            <input type="number" name="number" />
+            <button type="submit">Submit</button>
+            <div>Calculation: {totalCount}</div>
+          </form>
+        </div>
+        <hr />
+        <h4>useCallback</h4>
+        <div>CORRECT</div>
+        <div id="usecallback" style={theme}>
           <input
-            type="text"
-            value={name}
+            type="number"
+            value={number}
             onChange={(e) => {
-              setName(e.target.value);
+              setNumber(parseInt(e.target.value));
             }}
           />
-          <button onClick={addName}>Add</button>
-        </div>
-      </div>
-      <hr />
-      <div id="usereducer">
-        <h4>useReducer</h4>
-        <div>Number: {state.number}</div>
-        <button onClick={() => dispatch({ type: "INCREMENT" })}>
-          PLUS ONE
-        </button>
-        <button onClick={() => dispatch({ type: "DECREMENT" })}>
-          MINUS ONE
-        </button>
-        <button onClick={() => dispatch({ type: "ZERO" })}>RESTART</button>
-      </div>
-      <hr />
-      <div id="usememo">
-        <h4>useMemo</h4>
-        <h5>A calculation without UseMemo</h5>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setCount1Bad(e.target.number.value);
-            totalCountBad();
-          }}
-        >
-          <input type="number" name="number" />
-          <button type="submit">Submit</button>
-          <div>Calculation: {badtotalcount}</div>
-        </form>
-        <br />
-        <h5>A calculation with UseMemo</h5>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setCount1(e.target.number.value);
-          }}
-        >
-          <input type="number" name="number" />
-          <button type="submit">Submit</button>
-          <div>Calculation: {totalCount}</div>
-        </form>
-      </div>
-      <hr />
-      <h4>useCallback</h4>
-      <div>CORRECT</div>
-      <div id="usecallback" style={theme}>
-        <input
-          type="number"
-          value={number}
-          onChange={(e) => {
-            setNumber(parseInt(e.target.value));
-          }}
-        />
-        <button onClick={() => setDarkmode((prevDark) => !prevDark)}>
-          SwitchTheme
-        </button>
-        <GetList getNumbers={getNumbers} />
-        <br />
-      </div>
-      <div style={BADtheme}>
-        <div>WRONG</div>
-        <input
-          type="number"
-          value={numberBAD}
-          onChange={(e) => {
-            setNumberBAD(parseInt(e.target.value));
-          }}
-        />
-        <button onClick={() => setDarkmodeBAD((prevDark) => !prevDark)}>
-          SwitchTheme
-        </button>
-        <h4>{getNumbersBAD()}</h4>
-      </div>
-      <hr />
-      <div id="useeffect">
-        <h4>useEffect</h4>
-        <div>Fruits:</div>
-        {fruits.map((fruit) => (
-          <button key={fruit} onClick={() => onFruitSelect(fruit)}>
-            {fruit}
+          <button onClick={() => setDarkmode((prevDark) => !prevDark)}>
+            SwitchTheme
           </button>
-        ))}
-        <div>Data: {JSON.stringify(fruitData)}</div>
-      </div>
-      <hr />
-      <div id="useref">
-        <h4>UseRef</h4>
-        Count clicker:
-        <div>Ref value: {plus.current}</div>
-        <button onClick={plusOne}>Click: {display}</button>
+          <GetList getNumbers={getNumbers} />
+          <br />
+        </div>
+        <div style={BADtheme}>
+          <div>WRONG</div>
+          <input
+            type="number"
+            value={numberBAD}
+            onChange={(e) => {
+              setNumberBAD(parseInt(e.target.value));
+            }}
+          />
+          <button onClick={() => setDarkmodeBAD((prevDark) => !prevDark)}>
+            SwitchTheme
+          </button>
+          <h4>{getNumbersBAD()}</h4>
+        </div>
+        <hr />
+        <div id="useeffect">
+          <h4>useEffect</h4>
+          <div>Fruits:</div>
+          {fruits.map((fruit) => (
+            <button key={fruit} onClick={() => onFruitSelect(fruit)}>
+              {fruit}
+            </button>
+          ))}
+          <div>Data: {JSON.stringify(fruitData)}</div>
+        </div>
+        <hr />
+        <div id="useref">
+          <h4>UseRef</h4>
+          Count clicker:
+          <div>Ref value: {plus.current}</div>
+          <button onClick={plusOne}>Click: {display}</button>
+        </div>
       </div>
     </>
   );
