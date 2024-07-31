@@ -68,7 +68,7 @@ function useEmployeesSource(): {
 
   // to filter the array each time search value changes
   const filteredEmps = useMemo(() => {
-    return emps.filter((em) => em.name.includes(search));
+    return emps.filter((em) => em.name.toLowerCase().includes(search.toLowerCase()));
   }, [emps, search]);
 
   return { emps: filteredEmps, search, setSearch };
