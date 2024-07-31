@@ -6,6 +6,7 @@ import {
   useCallback,
   useMemo,
 } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 // to solve the 'never' array issue
 // interface - like a pre-defined frame for an object
@@ -26,41 +27,36 @@ function useEmployeesSource(): {
 } {
   // types to define in the useReducer
   type EmployeeState = {
-    emps: Employee[];
     search: string;
   };
   type EmployeeActions =
-    | { type: "setEmployee"; payload: Employee[] }
     | { type: "setSearch"; payload: string };
 
   // useReducer syntax:
   // const [state, dispatch] = useReducer(reducerFunction(state, action {like a switchCase}), initialArguments)
-  const [{ emps, search }, dispatch] = useReducer(
+  const [{  search }, dispatch] = useReducer(
     (state: EmployeeState, action: EmployeeActions) => {
       switch (action.type) {
-        case "setEmployee":
-          return { ...state, emps: action.payload };
         case "setSearch":
           return { ...state, search: action.payload };
       }
     },
     {
-      emps: [],
       search: "",
     }
   );
 
-  // fetches the data and calls a reducer dispatch to send data
-  useEffect(() => {
-    fetch("./data/employees.json")
-      .then((resp) => resp.json())
-      .then((data) =>
-        dispatch({
-          type: "setEmployee",
-          payload: data,
-        })
-      );
-  }, []);
+  // react query
+  const {data: emps} = useQuery({
+    queryKey: ["emps"],
+    queryFn: () => fetch('./data/employees.json').then((res)=>{
+      if(!res.ok){
+        throw new Error("Error is fetching!")
+      }
+      return res.json()
+    }),
+    initialData: [],
+  })
 
   // setting the search value using the reducer dispatch function
   const setSearch = useCallback((search: string) => {

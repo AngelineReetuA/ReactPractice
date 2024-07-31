@@ -1,6 +1,10 @@
 import React from "react";
 import { EmployeeProvider, useEmployees } from "./DataSource.tsx";
 
+// import and tell react that we are going to use query
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+const queryClient = new QueryClient();
+
 const EmployeeList = () => {
   const { emps } = useEmployees();
   return (
@@ -33,15 +37,18 @@ function SearchBox() {
 function IndirectMethods() {
   return (
     <>
-      <EmployeeProvider>
-        <div style={{ padding: "20px" }}>
-          <b>UseContext & Custom Hooks with Tanstack Router</b>
-          <br/><br/>
-          <div>Search for a name:</div>
-          <SearchBox />
-          <EmployeeList />
-        </div>
-      </EmployeeProvider>
+      <QueryClientProvider client={queryClient}>
+        <EmployeeProvider>
+          <div style={{ padding: "20px" }}>
+            <b>UseContext & Custom Hooks with Tanstack Router</b>
+            <br />
+            <br />
+            <div>Search for a name:</div>
+            <SearchBox />
+            <EmployeeList />
+          </div>
+        </EmployeeProvider>
+      </QueryClientProvider>
     </>
   );
 }
